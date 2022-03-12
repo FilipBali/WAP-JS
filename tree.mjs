@@ -1,21 +1,21 @@
 /**
- *
- * @param expr
- * @constructor
+ * Binary tree structure
+ * @param expr Comparison function for node selection
+ * @constructor Tree object
  */
 function Tree(expr){
-    this.data = new EmptyTree(expr)
+    this.data = new EmptyNode(expr)
 
     /**
-     *
-     * @param value
+     * Tree structure implementation of function to insert a value into tree structure
+     * @param value Inserted value
      */
     Tree.prototype.insertValue = function(value){
         this.data = this.data.insertValue(value)
     }
 
     /**
-     *
+     * Tree structure implementation of function to preorder tree traversal
      * @returns {Generator<*, void, *>}
      */
     Tree.prototype.preorder = function(){
@@ -23,7 +23,7 @@ function Tree(expr){
     }
 
     /**
-     *
+     * Tree structure implementation of function to inorder tree traversal
      * @returns {Generator<*, void, *>}
      */
     Tree.prototype.inorder = function(){
@@ -31,7 +31,7 @@ function Tree(expr){
     }
 
     /**
-     *
+     * Tree structure implementation of function to inorder tree traversal
      * @returns {Generator<*, void, *>}
      */
     Tree.prototype.postorder = function(){
@@ -40,23 +40,23 @@ function Tree(expr){
 }
 
 /**
- *
- * @param expr
- * @param value
- * @constructor
+ * Node with value
+ * @param expr Comparison function for node selection
+ * @param value Node value
+ * @constructor Node object with value
  */
-function ValueTree(expr, value){
+function ValueNode(expr, value){
     this.fexpr = expr
     this.data = value
-    this.left = new EmptyTree(expr)
-    this.right = new EmptyTree(expr)
+    this.left = new EmptyNode(expr)
+    this.right = new EmptyNode(expr)
 
     /**
-     *
+     * Node with value implementation of function to insert a value into tree structure
      * @param value
-     * @returns {ValueTree}
+     * @returns {ValueNode}
      */
-    ValueTree.prototype.insertValue = function(value){
+    ValueNode.prototype.insertValue = function(value){
         if (this.fexpr(value, this.data)) {
             this.left = this.left.insertValue(value)
         } else {
@@ -67,30 +67,30 @@ function ValueTree(expr, value){
 
 
     /**
-     *
+     * Node with value implementation of function to preorder tree traversal
      * @returns {Generator<Generator<*, void, *>|*, void, *>}
      */
-    ValueTree.prototype.preorder = function*(){
+    ValueNode.prototype.preorder = function*(){
         yield this.data
         yield *this.left.preorder()
         yield *this.right.preorder()
     }
 
     /**
-     *
+     * Node with value implementation of function to inorder tree traversal
      * @returns {Generator<Generator<*, void, *>|*, void, *>}
      */
-    ValueTree.prototype.inorder = function*(){
+    ValueNode.prototype.inorder = function*(){
         yield *this.left.inorder()
         yield this.data
         yield *this.right.inorder()
     }
 
     /**
-     *
+     * Node with value implementation of function to postorder tree traversal
      * @returns {Generator<Generator<*, void, *>|*, void, *>}
      */
-    ValueTree.prototype.postorder = function*(){
+    ValueNode.prototype.postorder = function*(){
         yield *this.left.postorder()
         yield *this.right.postorder()
         yield this.data
@@ -98,27 +98,35 @@ function ValueTree(expr, value){
 }
 
 /**
- *
- * @param expr
- * @constructor
+ * Node with no value
+ * @param expr Comparison function for node selection
+ * @constructor Node object without value
  */
-function EmptyTree(expr){
+function EmptyNode(expr){
     this.fexpr = expr
 
     /**
-     *
+     * Node with no value implementation of function to insert a value into tree structure
      * @param value
-     * @returns {ValueTree}
+     * @returns {ValueNode}
      */
-    EmptyTree.prototype.insertValue = function(value){
-        return new ValueTree(this.fexpr, value);
+    EmptyNode.prototype.insertValue = function(value){
+        return new ValueNode(this.fexpr, value);
     }
 
     /**
-     *
+     * Node with no value implementation of function to postorder tree traversal
      * @returns {Generator<*, void, *>}
      */
-    EmptyTree.prototype.preorder = function*(){}
-    EmptyTree.prototype.inorder = function*(){}
-    EmptyTree.prototype.postorder = function*(){}
+    EmptyNode.prototype.preorder = function*(){}
+    /**
+     * Node with no value implementation of function to postorder tree traversal
+     * @returns {Generator<*, void, *>}
+     */
+    EmptyNode.prototype.inorder = function*(){}
+    /**
+     * Node with no value implementation of function to postorder tree traversal
+     * @returns {Generator<*, void, *>}
+     */
+    EmptyNode.prototype.postorder = function*(){}
 }
