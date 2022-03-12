@@ -1,127 +1,124 @@
+/**
+ *
+ * @param expr
+ * @constructor
+ */
 function Tree(expr){
-
-    this.fexpr = expr
     this.data = new EmptyTree(expr)
-    // this.left = new EmptyTree(expr)
-    // this.right = new EmptyTree(expr)
 
+    /**
+     *
+     * @param value
+     */
     Tree.prototype.insertValue = function(value){
-        // console.log(value);
-
-        let t = this.data
-        this.data = t.insertValue(value)
-
+        this.data = this.data.insertValue(value)
     }
 
+    /**
+     *
+     * @returns {Generator<*, void, *>}
+     */
     Tree.prototype.preorder = function(){
-        // this.data.preorder()
+        return this.data.preorder()
+    }
 
-        const gen = this.data.preorder()
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-    }
+    /**
+     *
+     * @returns {Generator<*, void, *>}
+     */
     Tree.prototype.inorder = function(){
-        const gen = this.data.inorder()
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
+        return this.data.inorder()
     }
+
+    /**
+     *
+     * @returns {Generator<*, void, *>}
+     */
     Tree.prototype.postorder = function(){
-        const gen = this.data.postorder()
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
-        console.log(gen.next().value);
+        return this.data.postorder()
     }
 }
 
+/**
+ *
+ * @param expr
+ * @param value
+ * @constructor
+ */
 function ValueTree(expr, value){
     this.fexpr = expr
     this.data = value
     this.left = new EmptyTree(expr)
     this.right = new EmptyTree(expr)
 
+    /**
+     *
+     * @param value
+     * @returns {ValueTree}
+     */
     ValueTree.prototype.insertValue = function(value){
-        let tmp;
-        let newT;
         if (this.fexpr(value, this.data)) {
-            newT = this.left
-            tmp = newT.insertValue(value)
-            this.left = tmp
+            this.left = this.left.insertValue(value)
         } else {
-            newT = this.right
-            tmp = newT.insertValue(value)
-            this.right = tmp
+            this.right = this.right.insertValue(value)
         }
         return this
     }
 
 
-    // ValueTree.prototype.preorder = function(){
+    /**
+     *
+     * @returns {Generator<Generator<*, void, *>|*, void, *>}
+     */
     ValueTree.prototype.preorder = function*(){
-        // console.log(this.data)
-        // this.left.preorder()
-        // this.right.preorder()
-
         yield this.data
         yield *this.left.preorder()
         yield *this.right.preorder()
     }
 
+    /**
+     *
+     * @returns {Generator<Generator<*, void, *>|*, void, *>}
+     */
     ValueTree.prototype.inorder = function*(){
-        yield *this.left.preorder()
+        yield *this.left.inorder()
         yield this.data
-        yield *this.right.preorder()
+        yield *this.right.inorder()
     }
+
+    /**
+     *
+     * @returns {Generator<Generator<*, void, *>|*, void, *>}
+     */
     ValueTree.prototype.postorder = function*(){
-        yield *this.left.preorder()
-        yield *this.right.preorder()
+        yield *this.left.postorder()
+        yield *this.right.postorder()
         yield this.data
     }
 }
 
-
+/**
+ *
+ * @param expr
+ * @constructor
+ */
 function EmptyTree(expr){
     this.fexpr = expr
-    this.data = null
-    this.left = null
-    this.right = null
 
+    /**
+     *
+     * @param value
+     * @returns {ValueTree}
+     */
     EmptyTree.prototype.insertValue = function(value){
-        let nt = new ValueTree(this.fexpr, value);
-        return nt
+        return new ValueTree(this.fexpr, value);
     }
 
-    // EmptyTree.prototype.preorder = function(){
+    /**
+     *
+     * @returns {Generator<*, void, *>}
+     */
     EmptyTree.prototype.preorder = function*(){}
     EmptyTree.prototype.inorder = function*(){}
     EmptyTree.prototype.postorder = function*(){}
 }
-
-let t = new Tree((a,b) => a < b);
-console.log( t.fexpr(2,1) )
-t.insertValue(3)
-t.insertValue(9)
-t.insertValue(10)
-t.insertValue(15)
-t.insertValue(1)
-t.insertValue(4)
-t.insertValue(6)
-t.preorder()
-t.inorder()
-t.postorder()
