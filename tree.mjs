@@ -1,9 +1,15 @@
 /**
+ * @author Filip Bali (xbalif00)
+ * xbalif00@stud.fit.vutbr.cz
+ * WAP JS Project
+ */
+
+/**
  * Binary tree structure
  * @param expr Comparison function for node selection
  * @constructor Tree object
  */
-function Tree(expr){
+export function Tree(expr){
     this.data = new EmptyNode(expr)
 
     /**
